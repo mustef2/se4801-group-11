@@ -1,5 +1,6 @@
 package com.sustainabilitytracker.mapper;
 
+import com.sustainabilitytracker.dtos.UserDto;
 import com.sustainabilitytracker.dtos.requests.RegisterUserRequest;
 import com.sustainabilitytracker.dtos.responses.UserResponse;
 import com.sustainabilitytracker.entities.User;
@@ -9,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
+    UserDto toDto(User user);
 
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "department", ignore = true)
