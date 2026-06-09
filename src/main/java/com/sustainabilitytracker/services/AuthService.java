@@ -1,5 +1,6 @@
 package com.sustainabilitytracker.services;
 
+import com.sustainabilitytracker.dtos.requests.ChangePasswordRequest;
 import com.sustainabilitytracker.dtos.requests.RegisterUserRequest;
 import com.sustainabilitytracker.dtos.responses.UserResponse;
 import com.sustainabilitytracker.entities.Department;
@@ -13,6 +14,10 @@ import com.sustainabilitytracker.repositories.DepartmentRepository;
 import com.sustainabilitytracker.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,4 +67,56 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         return userMapper.toResponse(savedUser);
     }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UsernameNotFoundException("User not found. Please log in first.");
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        // If my own User entity was stored in principal
+        if (principal instanceof User user) {
+            return user;
+        }
+
+        if (principal instanceof UserDetails userDetails) {
+            String email = userDetails.getUsername();
+
+            return userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        }
+
+        throw new UsernameNotFoundException("Unable to get current user");
+    }
+
+    public void changePassword(ChangePasswordRequest request) {
+
+        User user = getCurrentUser();
+
+        if (!passwordEncoder.matches(
+                request.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Current password is wrong");
+        }
+
+        if (passwordEncoder.matches(
+                request.getNewPassword(), user.getPassword())) {
+            throw new RuntimeException("New password must be different");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match");
+        }
+
+        String hashedNewPassword = passwordEncoder.encode(request.getNewPassword());
+
+        user.setPassword(hashedNewPassword);
+
+        user.setIsFirstLogin(false);
+
+        userRepository.save(user);
+    }
+
 }
