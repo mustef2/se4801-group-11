@@ -1,10 +1,9 @@
 services:
-  mysql:
-    image: 'mysql:latest'
+  db:
+    image: mysql:8
+    container_name: tracker
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      MYSQL_ROOT_PASSWORD: myPassword!
+      MYSQL_DATABASE: tracker_db
     ports:
-      - '3306'
+      - "3306:3306"
