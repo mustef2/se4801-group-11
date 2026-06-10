@@ -49,4 +49,5 @@ public class DepartmentController {
         departmentService.deactivateDepartment(departmentId);
         return ResponseEntity.noContent().build();
     }
+
 }
