@@ -46,5 +46,12 @@ public class EnergyController {
         return ResponseEntity.ok(energyResponse);
     }
 
+    // APPROVE ENERGY
+    @PutMapping("/{energyId}/approve")
+    public ResponseEntity<EnergyResponse> approveEnergy(@PathVariable Long energyId) {
+        EnergyResponse energyResponse = energyService.approveEnergy(energyId);
+        return ResponseEntity.ok(energyResponse);
+    }
+
 
 }
