@@ -39,5 +39,12 @@ public class EnergyController {
         return ResponseEntity.created(uri).body(energyResponse);
     }
 
+    // SUBMIT FOR APPROVAL
+    @PutMapping("/{energyId}/submit")
+    public ResponseEntity<EnergyResponse> submitForApproval(@PathVariable Long energyId) {
+        EnergyResponse energyResponse = energyService.submitForApproval(energyId);
+        return ResponseEntity.ok(energyResponse);
+    }
+
 
 }
