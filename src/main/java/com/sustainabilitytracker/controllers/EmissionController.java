@@ -57,5 +57,25 @@ public class EmissionController {
         return ResponseEntity.ok(emissionData);
     }
 
+    @GetMapping("/company/{companyId}/summary")
+    public ResponseEntity<EmissionSummaryResponse> getEmissionSummary(
+            @PathVariable Long companyId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
 
+        LocalDate now = LocalDate.now();
+
+        Instant startInstant = (startDate != null ?
+                startDate.atStartOfDay(ZoneOffset.UTC).toInstant() :
+                now.minusDays(30).atStartOfDay(ZoneOffset.UTC).toInstant());
+
+        Instant endInstant = (endDate != null ?
+                endDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC) :
+                now.atTime(23, 59, 59).toInstant(ZoneOffset.UTC));
+
+        EmissionSummaryResponse summaryResponse = emissionService
+                .getEmissionSummary(companyId, startInstant, endInstant);
+
+        return ResponseEntity.ok(summaryResponse);
+    }
 }
