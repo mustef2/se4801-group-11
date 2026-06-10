@@ -25,5 +25,11 @@ public class EmissionController {
         return ResponseEntity.created(uri).body(emissionResponse);
     }
 
+    @PutMapping("/{emissionId}/submit")
+    public ResponseEntity<EmissionResponse> submitForApproval(@PathVariable Long emissionId) {
+        EmissionResponse emissionResponse = emissionService.submitForApproval(emissionId);
+        return ResponseEntity.ok(emissionResponse);
+    }
+
 
 }
