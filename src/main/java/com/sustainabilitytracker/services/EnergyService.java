@@ -208,6 +208,32 @@ public class EnergyService {
         return energyMapper.toResponse(updated);
     }
 
+    // GET ENERGY BY COMPANY
+    public List<EnergyResponse> getEnergyByCompany(Long companyId) {
+        User user = authService.getCurrentUser();
+
+        User currentUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + user.getId()));
+
+        if (!hasCompanyAccess(currentUser, companyId)) {
+            throw new AccessDeniedException("You do not have access to this company's energy data");
+        }
+
+        List<EnergyData> energyList;
+
+        if (currentUser.getRole() == Role.EMPLOYEE) {
+            energyList = energyRepository.findBySubmittedBy_Id(currentUser.getId());
+        }
+        else if (currentUser.getRole() == Role.DEPT_MANAGER) {
+            energyList = energyRepository.findByDepartmentId(currentUser.getDepartment().getId());
+        }
+        else {
+            energyList = energyRepository.findByCompanyId(companyId);
+        }
+
+        return energyMapper.toResponseList(energyList);
+    }
+
 
 
     private void checkApprovePermission(User user, EnergyData energyData) {
@@ -227,5 +253,12 @@ public class EnergyService {
             default:
                 throw new UnauthorizedException("You do not have permission to approve this record");
         }
+    }
+
+    private boolean hasCompanyAccess(User user, Long companyId) {
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.AUDITOR) {
+            return true;
+        }
+        return user.getCompany() != null && user.getCompany().getId().equals(companyId);
     }
 }
