@@ -53,5 +53,15 @@ public class EnergyController {
         return ResponseEntity.ok(energyResponse);
     }
 
+    // REJECT ENERGY
+    @PutMapping("/{energyId}/reject")
+    public ResponseEntity<EnergyResponse> rejectEnergy(
+            @PathVariable Long energyId,
+            @Valid @RequestBody RejectRequest request) {
+
+        EnergyResponse energyResponse = energyService.rejectEnergy(energyId, request.getReason());
+        return ResponseEntity.ok(energyResponse);
+    }
+
 
 }
