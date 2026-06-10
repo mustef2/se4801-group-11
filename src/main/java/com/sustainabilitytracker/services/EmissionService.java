@@ -16,8 +16,10 @@ import com.sustainabilitytracker.repositories.DepartmentRepository;
 import com.sustainabilitytracker.repositories.EmissionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 
 @Service
@@ -107,6 +109,33 @@ public class EmissionService {
     private boolean isAbnormalValue(BigDecimal co2Amount) {
         final BigDecimal CO2_THRESHOLD = new BigDecimal("10000");
         return co2Amount != null && co2Amount.compareTo(CO2_THRESHOLD) > 0;
+    }
+
+    @Transactional
+    public EmissionResponse submitForApproval(Long emissionId) {
+
+        EmissionData emissionData = emissionRepository.findById(emissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + emissionId));
+
+        User currentUser = authService.getCurrentUser();
+
+        if (!emissionData.getSubmittedBy().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedException("You can only submit your own emission records for approval");
+        }
+
+        if (emissionData.getStatus() != DataStatus.DRAFT) {
+            throw new BusinessException("Only DRAFT records can be submitted for approval. Current status: "
+                    + emissionData.getStatus());
+        }
+
+        emissionData.setStatus(DataStatus.PENDING);
+        emissionData.setSubmittedAt(Instant.now());
+        EmissionData savedEmission = emissionRepository.save(emissionData);
+
+        // Send notification to DEPT_MANAGER
+//        notificationService.notifyDepartmentManagerForApproval(savedEmission);
+
+        return emissionMapper.toResponse(savedEmission);
     }
 
 
