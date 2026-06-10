@@ -2,13 +2,16 @@ package com.sustainabilitytracker.services;
 
 import com.sustainabilitytracker.dtos.requests.EnergyRequest;
 import com.sustainabilitytracker.dtos.responses.EnergyResponse;
+import com.sustainabilitytracker.dtos.responses.EnergySummaryResponse;
 import com.sustainabilitytracker.entities.Company;
 import com.sustainabilitytracker.entities.Department;
 import com.sustainabilitytracker.entities.EnergyData;
 import com.sustainabilitytracker.entities.User;
 import com.sustainabilitytracker.enums.DataStatus;
+import com.sustainabilitytracker.enums.Role;
 import com.sustainabilitytracker.exceptions.*;
 import com.sustainabilitytracker.mapper.EnergyMapper;
+import com.sustainabilitytracker.projections.EnergyTotalsProjection;
 import com.sustainabilitytracker.repositories.CompanyRepository;
 import com.sustainabilitytracker.repositories.DepartmentRepository;
 import com.sustainabilitytracker.repositories.EnergyRepository;
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -110,6 +116,34 @@ public class EnergyService {
             default:
                 throw new UnauthorizedException("You do not have permission to submit energy data");
         }
+    }
+
+
+    @Transactional
+    public EnergyResponse submitForApproval(Long energyId) {
+
+        EnergyData energyData = energyRepository.findById(energyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Energy record not found with id: " + energyId));
+        User currentUser = authService.getCurrentUser();
+        if (!energyData.getSubmittedBy().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedException("You can only submit your own records for approval");
+        }
+
+        if (energyData.getStatus() != DataStatus.DRAFT) {
+            throw new BadRequestException("Only DRAFT records can be submitted for approval. Current: " + energyData.getStatus());
+        }
+
+        energyData.setStatus(DataStatus.PENDING);
+        energyData.setSubmittedAt(Instant.now());
+
+        EnergyData updated = energyRepository.save(energyData);
+
+//        notificationService.notifyByDepartmentAndRole(
+//                energyData.getDepartment().getId(),
+//                "DEPT_MANAGER",
+//                "Energy record waiting for approval");
+
+        return energyMapper.toResponse(updated);
     }
 
 
