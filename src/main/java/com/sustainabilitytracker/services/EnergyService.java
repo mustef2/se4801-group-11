@@ -234,7 +234,20 @@ public class EnergyService {
         return energyMapper.toResponseList(energyList);
     }
 
+    // GET ENERGY SUMMARY
+    public EnergySummaryResponse getEnergySummary(Long companyId, LocalDate start, LocalDate end) {
 
+        EnergyTotalsProjection totals = energyRepository
+                .getTotalsByCompanyAndPeriod(companyId, start, end);
+
+        return EnergySummaryResponse.builder()
+                .totalKwh(totals.getTotalKwh())
+                .totalRenewableKwh(totals.getTotalRenewableKwh())
+                .averageKwh(totals.getAverageKwh())
+                .period(start + " to " + end)
+                .recordCount(totals.getRecordCount().intValue())
+                .build();
+    }
 
     private void checkApprovePermission(User user, EnergyData energyData) {
         switch (user.getRole()) {
