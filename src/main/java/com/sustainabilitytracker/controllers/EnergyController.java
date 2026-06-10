@@ -63,5 +63,12 @@ public class EnergyController {
         return ResponseEntity.ok(energyResponse);
     }
 
+    // GET ENERGY BY COMPANY
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<EnergyResponse>> getEnergyByCompany(@PathVariable Long companyId) {
+        List<EnergyResponse> energyData = energyService.getEnergyByCompany(companyId);
+        return ResponseEntity.ok(energyData);
+    }
+
 
 }
