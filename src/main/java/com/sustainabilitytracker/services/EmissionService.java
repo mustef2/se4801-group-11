@@ -193,6 +193,57 @@ public class EmissionService {
         return false;
     }
 
+    @Transactional
+    public EmissionResponse rejectEmission(Long emissionId, String reason) {
+
+        EmissionData emissionData = emissionRepository.findById(emissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + emissionId));
+
+        User currentUser = authService.getCurrentUser();
+
+        if (!checkRejectPermission(currentUser, emissionData)) {
+            throw new AccessDeniedException("You do not have permission to reject this emission data");
+        }
+
+        if (emissionData.getStatus() != DataStatus.PENDING) {
+            throw new BadRequestException("Only PENDING emissions can be rejected. Current status: "
+                    + emissionData.getStatus());
+        }
+
+        emissionData.setStatus(DataStatus.REJECTED);
+        emissionData.setRejectionReason(reason);
+
+        emissionData = emissionRepository.save(emissionData);
+
+
+//        sendRejectionNotification(emissionData);
+
+        return emissionMapper.toResponse(emissionData);
+    }
+    private boolean checkRejectPermission(User approver, EmissionData emissionData) {
+        if (approver == null || emissionData == null) {
+            return false;
+        }
+
+        Role role = approver.getRole();
+
+        // DEPT_MANAGER: can only reject in his own department
+        if (role == Role.DEPT_MANAGER) {
+            return emissionData.getDepartment() != null &&
+                    approver.getDepartment() != null &&
+                    emissionData.getDepartment().getId().equals(approver.getDepartment().getId());
+        }
+
+        // SUSTAINABILITY_MANAGER: can reject any department in his company
+        if (role == Role.SUSTAINABILITY_MANAGER) {
+            return emissionData.getCompany() != null &&
+                    approver.getCompany() != null &&
+                    emissionData.getCompany().getId().equals(approver.getCompany().getId());
+        }
+
+        return role == Role.ADMIN;
+    }
+
 
 
 }
