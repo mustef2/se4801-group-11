@@ -138,6 +138,61 @@ public class EmissionService {
         return emissionMapper.toResponse(savedEmission);
     }
 
+    @Transactional
+    public EmissionResponse approveEmission(Long emissionId) {
+
+        EmissionData emissionData = emissionRepository.findById(emissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Emission not found with id: " + emissionId));
+
+        User currentUser = authService.getCurrentUser();
+
+        // Check permission based on role
+        boolean canApprove = checkApprovalPermission(currentUser, emissionData);
+
+        if (!canApprove) {
+            throw new AccessDeniedException("You do not have permission to approve this emission data");
+        }
+
+        // Check status is PENDING
+        if (emissionData.getStatus() != DataStatus.PENDING) {
+            throw new BusinessException("Only PENDING records can be approved. Current status: "
+                    + emissionData.getStatus());
+        }
+
+        // Approve the record
+        emissionData.setStatus(DataStatus.APPROVED);
+        emissionData.setApprovedBy(currentUser);
+        emissionData.setApprovedAt(Instant.now());
+
+        EmissionData savedEmission = emissionRepository.save(emissionData);
+
+
+        // notificationService.notifySubmitterEmissionApproved(savedEmission);
+
+
+        return emissionMapper.toResponse(savedEmission);
+    }
+    private boolean checkApprovalPermission(User approver, EmissionData emissionData) {
+
+        Role role = approver.getRole();
+
+        // DEPT_MANAGER: can only approve in his own department
+        if (role == Role.DEPT_MANAGER) {
+            return emissionData.getDepartment() != null &&
+                    approver.getDepartment() != null &&
+                    emissionData.getDepartment().getId().equals(approver.getDepartment().getId());
+        }
+
+        // SUSTAINABILITY_MANAGER: can approve any department in his company
+        if (role == Role.SUSTAINABILITY_MANAGER) {
+            return emissionData.getCompany() != null &&
+                    approver.getCompany() != null &&
+                    emissionData.getCompany().getId().equals(approver.getCompany().getId());
+        }
+
+        return false;
+    }
+
 
 
 }
