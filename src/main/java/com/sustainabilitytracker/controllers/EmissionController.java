@@ -78,4 +78,5 @@ public class EmissionController {
 
         return ResponseEntity.ok(summaryResponse);
     }
+    
 }
