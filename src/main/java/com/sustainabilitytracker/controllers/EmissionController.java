@@ -51,5 +51,11 @@ public class EmissionController {
         return ResponseEntity.ok(emissionResponse);
     }
 
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<EmissionResponse>> getEmissionsByCompany(@PathVariable Long companyId) {
+        List<EmissionResponse> emissionData = emissionService.getEmissionByCompany(companyId);
+        return ResponseEntity.ok(emissionData);
+    }
+
 
 }
