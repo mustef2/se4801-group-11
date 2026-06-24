@@ -64,4 +64,6 @@ public interface EnergyRepository
     boolean existsByDepartmentIdAndRecordedAtAndStatus(Long id, @NotNull(message = "Recorded date is required") LocalDate recordedAt, DataStatus dataStatus);
 
     List<EnergyData> findAllByCompanyAndStatusAndSubmittedAtBetween(Company company, DataStatus dataStatus, Instant startDate, Instant endDate);
+
+    List<EnergyData> findBySubmittedById(Long id);
 }
