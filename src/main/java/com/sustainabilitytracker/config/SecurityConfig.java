@@ -35,9 +35,216 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // PUBLIC ENDPOINTS (No login needed)
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/register").hasRole(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/users").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        // USER MANAGEMENT (Admin only)
+                        .requestMatchers(HttpMethod.POST, "/users/register")
+                        .hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/users")
+                        .hasRole(Role.ADMIN.name())
+
+                        // COMPANY MANAGEMENT (Admin only)
+                        .requestMatchers("/companies/**")
+                        .hasRole(Role.ADMIN.name())
+
+                        // DEPARTMENT MANAGEMENT (Admin only)
+                        .requestMatchers("/departments/**")
+                        .hasRole(Role.ADMIN.name())
+
+                        // ENVIRONMENT DATA - SUBMIT (POST)
+                        // Employee, Dept Manager, Sustainability Mgr
+                        .requestMatchers(HttpMethod.POST,
+                                "/emissions",
+                                "/energies",
+                                "/water",
+                                "/waste",
+                                "/social")
+                        .hasAnyRole(
+                                Role.EMPLOYEE.name(),
+                                Role.DEPT_MANAGER.name(),
+                                Role.SUSTAINABILITY_MANAGER.name()
+                        )
+
+                        // ENVIRONMENT DATA - SUBMIT FOR APPROVAL
+                        // Employee, Dept Manager
+                        .requestMatchers(HttpMethod.PUT,
+                                "/emissions/*/submit",
+                                "/energies/*/submit",
+                                "/water/*/submit",
+                                "/waste/*/submit",
+                                "/social/*/submit")
+                        .hasAnyRole(
+                                Role.EMPLOYEE.name(),
+                                Role.DEPT_MANAGER.name()
+                        )
+
+                        // ENVIRONMENT DATA - APPROVE
+                        // Dept Manager, Sustainability Manager
+                        .requestMatchers(HttpMethod.PUT,
+                                "/emissions/*/approve",
+                                "/energies/*/approve",
+                                "/water/*/approve",
+                                "/waste/*/approve",
+                                "/social/*/approve")
+                        .hasAnyRole(
+                                Role.DEPT_MANAGER.name(),
+                                Role.SUSTAINABILITY_MANAGER.name()
+                        )
+
+                        // ENVIRONMENT DATA - REJECT
+                        // Dept Manager, Sustainability Manager
+                        .requestMatchers(HttpMethod.PUT,
+                                "/emissions/*/reject",
+                                "/energies/*/reject",
+                                "/water/*/reject",
+                                "/waste/*/reject",
+                                "/social/*/reject")
+                        .hasAnyRole(
+                                Role.DEPT_MANAGER.name(),
+                                Role.SUSTAINABILITY_MANAGER.name()
+                        )
+
+                        // ENVIRONMENT DATA - VIEW (GET)
+                        // All roles (filtered in service layer)
+                        .requestMatchers(HttpMethod.GET,
+                                "/emissions/company/*",
+                                "/energies/company/*",
+                                "/water/company/*",
+                                "/waste/company/*",
+                                "/social/company/*")
+                        .hasAnyRole(
+                                Role.EMPLOYEE.name(),
+                                Role.DEPT_MANAGER.name(),
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        // ENVIRONMENT DATA - SUMMARY (GET)
+                        .requestMatchers(HttpMethod.GET,
+                                "/emissions/company/*/summary",
+                                "/energies/company/*/summary",
+                                "/water/company/*/summary",
+                                "/waste/company/*/summary",
+                                "/social/company/*/summary")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        // GOVERNANCE (Sustainability Mgr only)
+                        .requestMatchers(HttpMethod.POST, "/governance")
+                        .hasRole(Role.SUSTAINABILITY_MANAGER.name())
+
+                        .requestMatchers(HttpMethod.PUT, "/governance/*/submit")
+                        .hasRole(Role.SUSTAINABILITY_MANAGER.name())
+
+                        .requestMatchers(HttpMethod.PUT, "/governance/*/approve")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        .requestMatchers(HttpMethod.PUT, "/governance/*/reject")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/governance/company/*")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/governance/company/*/summary")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        // SCORE CALCULATION
+                        .requestMatchers(HttpMethod.POST, "/scores/calculate")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/scores/latest/*")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.DEPT_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/scores/history/*")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.DEPT_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        // REPORTS
+                        .requestMatchers(HttpMethod.POST, "/reports")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/reports/company/*")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/reports/*/download")
+                        .hasAnyRole(
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        // AUDIT
+                        .requestMatchers(HttpMethod.GET, "/audits/pending")
+                        .hasAnyRole(
+                                Role.AUDITOR.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        .requestMatchers(HttpMethod.PUT, "/audits/reports/*/review")
+                        .hasRole(Role.AUDITOR.name())
+
+                        .requestMatchers(HttpMethod.GET, "/audits/reports/*/history")
+                        .hasAnyRole(
+                                Role.AUDITOR.name(),
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name()
+                        )
+
+                        // DASHBOARD
+                        .requestMatchers(HttpMethod.GET, "/dashboard/company/*")
+                        .hasAnyRole(
+                                Role.DEPT_MANAGER.name(),
+                                Role.SUSTAINABILITY_MANAGER.name(),
+                                Role.ADMIN.name(),
+                                Role.AUDITOR.name()
+                        )
+
+                        .requestMatchers(HttpMethod.GET, "/dashboard/admin")
+                        .hasRole(Role.ADMIN.name())
+
+                        // NOTIFICATIONS
+                        .requestMatchers("/notifications/**")
+                        .authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
