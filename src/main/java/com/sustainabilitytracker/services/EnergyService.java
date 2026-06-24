@@ -100,23 +100,6 @@ public class EnergyService {
 
         return energyMapper.toResponse(savedEnergy);
     }
-    private void checkSubmitPermission(User user, Department department, Company company) {
-        switch (user.getRole()) {
-            case EMPLOYEE:
-            case DEPT_MANAGER:
-                if (!user.getDepartment().getId().equals(department.getId())) {
-                    throw new UnauthorizedException("You can only submit for your own department");
-                }
-                break;
-            case SUSTAINABILITY_MANAGER:
-                if (!user.getCompany().getId().equals(company.getId())) {
-                    throw new UnauthorizedException("You can only submit for your own company");
-                }
-                break;
-            default:
-                throw new UnauthorizedException("You do not have permission to submit energy data");
-        }
-    }
 
 
     @Transactional
@@ -222,7 +205,7 @@ public class EnergyService {
         List<EnergyData> energyList;
 
         if (currentUser.getRole() == Role.EMPLOYEE) {
-            energyList = energyRepository.findBySubmittedBy_Id(currentUser.getId());
+            energyList = energyRepository.findBySubmittedById(currentUser.getId());
         }
         else if (currentUser.getRole() == Role.DEPT_MANAGER) {
             energyList = energyRepository.findByDepartmentId(currentUser.getDepartment().getId());
@@ -247,6 +230,24 @@ public class EnergyService {
                 .period(start + " to " + end)
                 .recordCount(totals.getRecordCount().intValue())
                 .build();
+    }
+
+    private void checkSubmitPermission(User user, Department department, Company company) {
+        switch (user.getRole()) {
+            case EMPLOYEE:
+            case DEPT_MANAGER:
+                if (!user.getDepartment().getId().equals(department.getId())) {
+                    throw new UnauthorizedException("You can only submit for your own department");
+                }
+                break;
+            case SUSTAINABILITY_MANAGER:
+                if (!user.getCompany().getId().equals(company.getId())) {
+                    throw new UnauthorizedException("You can only submit for your own company");
+                }
+                break;
+            default:
+                throw new UnauthorizedException("You do not have permission to submit energy data");
+        }
     }
 
     private void checkApprovePermission(User user, EnergyData energyData) {
