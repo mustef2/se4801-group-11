@@ -45,3 +45,4 @@ public class ScoreCalculationController {
         return ResponseEntity.ok(history);
     }
 }
+
