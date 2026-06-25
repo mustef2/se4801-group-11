@@ -35,4 +35,5 @@ public class WasteRequest {
 
     @NotNull(message = "Recorded date is required")
     private LocalDate recordedAt;
+
 }
