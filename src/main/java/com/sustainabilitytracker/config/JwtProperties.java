@@ -14,6 +14,7 @@ public class JwtProperties {
     private String secret;
     private int accessTokenExpiration;
     private int refreshTokenExpiration;
+    private boolean isSecureCookie;
 
     public SecretKey getSecretKey(){
         return Keys.hmacShaKeyFor(secret.getBytes());
