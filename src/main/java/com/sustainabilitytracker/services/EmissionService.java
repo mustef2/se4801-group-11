@@ -1,20 +1,20 @@
 package com.sustainabilitytracker.services;
 
 
-import com.sustainabilitytracker.sustainabilitytracker.dtos.request.EmissionRequest;
-import com.sustainabilitytracker.sustainabilitytracker.dtos.response.EmissionResponse;
-import com.sustainabilitytracker.sustainabilitytracker.dtos.response.EmissionSummaryResponse;
-import com.sustainabilitytracker.sustainabilitytracker.entities.Company;
-import com.sustainabilitytracker.sustainabilitytracker.entities.Department;
-import com.sustainabilitytracker.sustainabilitytracker.entities.EmissionData;
-import com.sustainabilitytracker.sustainabilitytracker.entities.User;
-import com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus;
-import com.sustainabilitytracker.sustainabilitytracker.enums.Role;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.*;
-import com.sustainabilitytracker.sustainabilitytracker.mappers.EmissionMapper;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.CompanyRepository;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.DepartmentRepository;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.EmissionRepository;
+import com.sustainabilitytracker.dtos.requests.EmissionRequest;
+import com.sustainabilitytracker.dtos.responses.EmissionResponse;
+import com.sustainabilitytracker.dtos.responses.EmissionSummaryResponse;
+import com.sustainabilitytracker.entities.Company;
+import com.sustainabilitytracker.entities.Department;
+import com.sustainabilitytracker.entities.EmissionData;
+import com.sustainabilitytracker.entities.User;
+import com.sustainabilitytracker.enums.DataStatus;
+import com.sustainabilitytracker.enums.Role;
+import com.sustainabilitytracker.exceptions.*;
+import com.sustainabilitytracker.mapper.EmissionMapper;
+import com.sustainabilitytracker.repositories.CompanyRepository;
+import com.sustainabilitytracker.repositories.DepartmentRepository;
+import com.sustainabilitytracker.repositories.EmissionRepository;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

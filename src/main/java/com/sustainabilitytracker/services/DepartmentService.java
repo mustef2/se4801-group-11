@@ -1,15 +1,15 @@
 package com.sustainabilitytracker.services;
 
-import com.sustainabilitytracker.sustainabilitytracker.dtos.request.DepartmentRequest;
-import com.sustainabilitytracker.sustainabilitytracker.dtos.response.DepartmentResponse;
-import com.sustainabilitytracker.sustainabilitytracker.entities.Company;
-import com.sustainabilitytracker.sustainabilitytracker.entities.Department;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.BadRequestException;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.DuplicateResourceException;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.ResourceNotFoundException;
-import com.sustainabilitytracker.sustainabilitytracker.mappers.DepartmentMapper;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.CompanyRepository;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.DepartmentRepository;
+import com.sustainabilitytracker.dtos.requests.DepartmentRequest;
+import com.sustainabilitytracker.dtos.responses.DepartmentResponse;
+import com.sustainabilitytracker.entities.Company;
+import com.sustainabilitytracker.entities.Department;
+import com.sustainabilitytracker.exceptions.BadRequestException;
+import com.sustainabilitytracker.exceptions.DuplicateResourceException;
+import com.sustainabilitytracker.exceptions.ResourceNotFoundException;
+import com.sustainabilitytracker.mapper.DepartmentMapper;
+import com.sustainabilitytracker.repositories.CompanyRepository;
+import com.sustainabilitytracker.repositories.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.internal.util.StringUtils;
