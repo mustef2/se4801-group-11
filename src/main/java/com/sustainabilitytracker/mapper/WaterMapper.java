@@ -36,4 +36,5 @@ public interface WaterMapper {
             NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget WaterData waterData,
                       WaterRequest request);
+
 }
