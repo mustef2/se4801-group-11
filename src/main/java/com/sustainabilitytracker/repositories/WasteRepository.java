@@ -1,8 +1,8 @@
 package com.sustainabilitytracker.repositories;
 
-import com.sustainabilitytracker.sustainabilitytracker.entities.WasteData;
-import com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus;
-import com.sustainabilitytracker.sustainabilitytracker.projection.WasteTotalsProjection;
+import com.sustainabilitytracker.entities.WasteData;
+import com.sustainabilitytracker.enums.DataStatus;
+import com.sustainabilitytracker.projections.WasteTotalsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

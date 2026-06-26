@@ -2,7 +2,7 @@ package com.sustainabilitytracker.repositories;
 
 import com.sustainabilitytracker.entities.WaterData;
 import com.sustainabilitytracker.enums.DataStatus;
-import com..sustainabilitytracker.projections.WaterTotalsProjection;
+import com.sustainabilitytracker.projections.WaterTotalsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
