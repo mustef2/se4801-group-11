@@ -1,8 +1,8 @@
 package com.sustainabilitytracker.entities;
 
+import com.sustainabilitytracker.enums.PeriodType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -13,6 +13,9 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "sustainability_scores")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SustainabilityScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +42,8 @@ public class SustainabilityScore {
     private String grade;
 
     @Column(name = "period_type")
-    private String periodType;
+    @Enumerated(EnumType.STRING)
+    private PeriodType periodType;
 
     @Column(name = "period_start")
     private LocalDate periodStart;
