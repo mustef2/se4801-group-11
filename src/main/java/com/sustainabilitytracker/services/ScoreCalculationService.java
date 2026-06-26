@@ -1,11 +1,11 @@
 package com.sustainabilitytracker.services;
 
-import com.sustainabilitytracker.sustainabilitytracker.entities.Company;
-import com.sustainabilitytracker.sustainabilitytracker.entities.SustainabilityScore;
-import com.sustainabilitytracker.sustainabilitytracker.enums.PeriodType;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.BadRequestException;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.ResourceNotFoundException;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.*;
+import com.sustainabilitytracker.entities.Company;
+import com.sustainabilitytracker.entities.SustainabilityScore;
+import com.sustainabilitytracker.enums.PeriodType;
+import com.sustainabilitytracker.exceptions.BadRequestException;
+import com.sustainabilitytracker.exceptions.ResourceNotFoundException;
+import com.sustainabilitytracker.repositories.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
