@@ -1,13 +1,13 @@
 package com.sustainabilitytracker.services;
 
-import com.sustainabilitytracker.sustainabilitytracker.dtos.request.CompanyRequest;
-import com.sustainabilitytracker.sustainabilitytracker.dtos.response.CompanyResponse;
-import com.sustainabilitytracker.sustainabilitytracker.entities.Company;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.BadRequestException;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.DuplicateResourceException;
-import com.sustainabilitytracker.sustainabilitytracker.exceptions.ResourceNotFoundException;
-import com.sustainabilitytracker.sustainabilitytracker.mappers.CompanyMapper;
-import com.sustainabilitytracker.sustainabilitytracker.repositories.CompanyRepository;
+import com.sustainabilitytracker.dtos.requests.CompanyRequest;
+import com.sustainabilitytracker.dtos.responses.CompanyResponse;
+import com.sustainabilitytracker.entities.Company;
+import com.sustainabilitytracker.exceptions.BadRequestException;
+import com.sustainabilitytracker.exceptions.DuplicateResourceException;
+import com.sustainabilitytracker.exceptions.ResourceNotFoundException;
+import com.sustainabilitytracker.mapper.CompanyMapper;
+import com.sustainabilitytracker.repositories.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
