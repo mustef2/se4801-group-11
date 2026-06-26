@@ -3,6 +3,7 @@ package com.sustainabilitytracker.security;
 
 import com.sustainabilitytracker.config.JwtProperties;
 import com.sustainabilitytracker.entities.User;
+import com.sustainabilitytracker.exceptions.BadRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,13 @@ public class JwtTokenProvider {
         }
     }
 
-    public String extractUserIdFromToken(String token) {
-        return getClaims(token).getSubject();
+    public Long extractUserIdFromToken(String token) {
+        String subject = getClaims(token).getSubject();
+        try {
+            return Long.parseLong(subject);
+        } catch (NumberFormatException ex) {
+            throw new BadRequestException("Invalid user ID in token");
+        }
     }
 
     public String extractRoleFromToken(String token) {

@@ -1,9 +1,12 @@
 package com.sustainabilitytracker.entities;
 
+import com.sustainabilitytracker.enums.AuditStatus;
+import com.sustainabilitytracker.enums.ReportType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -11,6 +14,9 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "esg_reports")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EsgReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +39,8 @@ public class EsgReport {
     private String reportTitle;
 
     @Column(name = "report_type")
-    private String reportType;
+    @Enumerated(EnumType.STRING)
+    private ReportType reportType;
 
     @Column(name = "file_path")
     private String filePath;
@@ -43,7 +50,8 @@ public class EsgReport {
 
     @ColumnDefault("'PENDING'")
     @Column(name = "audit_status")
-    private String auditStatus;
+    @Enumerated(EnumType.STRING)
+    private AuditStatus auditStatus;
 
     @Column(name = "period_start")
     private LocalDate periodStart;
@@ -51,8 +59,8 @@ public class EsgReport {
     @Column(name = "period_end")
     private LocalDate periodEnd;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "generated_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant generatedAt;
 
 

@@ -1,9 +1,11 @@
 package com.sustainabilitytracker.entities;
 
+import com.sustainabilitytracker.enums.DataStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -52,7 +54,8 @@ public class GovernanceData {
 
     @ColumnDefault("'DRAFT'")
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private DataStatus status;
 
     @Lob
     @Column(name = "notes")
@@ -71,9 +74,8 @@ public class GovernanceData {
     @Column(name = "approved_at")
     private Instant approvedAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
-
 
 }
