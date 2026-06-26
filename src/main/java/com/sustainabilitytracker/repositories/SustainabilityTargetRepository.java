@@ -35,6 +35,7 @@ public interface SustainabilityTargetRepository extends JpaRepository<Sustainabi
             @Param("periodEnd") LocalDate periodEnd
     );
 
+
     @Query("""
             SELECT t FROM SustainabilityTarget t
             WHERE t.company.id = :companyId
