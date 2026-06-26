@@ -1,15 +1,20 @@
 package com.sustainabilitytracker.entities;
 
+import com.sustainabilitytracker.enums.AuditAction;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "audit_records")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AuditRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +34,8 @@ public class AuditRecord {
     private Company company;
 
     @Column(name = "action")
-    private String action;
+    @Enumerated(EnumType.STRING)
+    private AuditAction action;
 
     @Lob
     @Column(name = "comments")
@@ -39,9 +45,9 @@ public class AuditRecord {
     @Column(name = "flagged_items")
     private String flaggedItems;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "audit_date")
-    private Instant auditDate;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
 
 }
