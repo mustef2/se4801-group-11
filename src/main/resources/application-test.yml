@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: ''
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  jwt:
+    secret: test-jwt-secret-key-for-unit-tests-32-chars-min
+    accessTokenExpiration: 900000
+    refreshTokenExpiration: 604800000
+    isSecureCookie: false
