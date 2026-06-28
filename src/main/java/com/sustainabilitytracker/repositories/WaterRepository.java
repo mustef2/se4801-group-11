@@ -49,7 +49,7 @@ public interface WaterRepository extends JpaRepository<WaterData, Long> {
             FROM WaterData w
             WHERE w.company.id = :companyId
             AND w.recordedAt BETWEEN :start AND :end
-            AND w.status = 'APPROVED'
+            AND w.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalConsumedLiters(
             @Param("companyId") Long companyId,
@@ -62,7 +62,7 @@ public interface WaterRepository extends JpaRepository<WaterData, Long> {
             FROM WaterData w
             WHERE w.company.id = :companyId
             AND w.recordedAt BETWEEN :start AND :end
-            AND w.status = 'APPROVED'
+            AND w.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalRecycledLiters(
             @Param("companyId") Long companyId,
