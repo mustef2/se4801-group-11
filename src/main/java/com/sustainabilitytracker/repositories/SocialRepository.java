@@ -35,7 +35,7 @@ public interface SocialRepository extends JpaRepository<SocialData, Long> {
                 COALESCE(AVG(s.satisfactionScore), 0)      AS avgSatisfactionScore
             FROM SocialData s
             WHERE s.company.id = :companyId
-            AND s.status = com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus.APPROVED
+            AND s.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             AND s.recordedAt BETWEEN :start AND :end
             """)
     SocialTotalsProjection getTotalsByCompanyAndPeriod(
@@ -49,7 +49,7 @@ public interface SocialRepository extends JpaRepository<SocialData, Long> {
             FROM SocialData s
             WHERE s.company.id = :companyId
             AND s.recordedAt BETWEEN :start AND :end
-            AND s.status = com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus.APPROVED
+            AND s.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     int getTotalSafetyIncidents(
             @Param("companyId") Long companyId,
@@ -65,7 +65,7 @@ public interface SocialRepository extends JpaRepository<SocialData, Long> {
             FROM SocialData s
             WHERE s.company.id = :companyId
             AND s.recordedAt BETWEEN :start AND :end
-            AND s.status = com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus.APPROVED
+            AND s.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     double getAverageFemaleRatio(
             @Param("companyId") Long companyId,
@@ -78,7 +78,7 @@ public interface SocialRepository extends JpaRepository<SocialData, Long> {
             FROM SocialData s
             WHERE s.company.id = :companyId
             AND s.recordedAt BETWEEN :start AND :end
-            AND s.status = com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus.APPROVED
+            AND s.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getAverageTrainingHours(
             @Param("companyId") Long companyId,
@@ -91,7 +91,7 @@ public interface SocialRepository extends JpaRepository<SocialData, Long> {
             FROM SocialData s
             WHERE s.company.id = :companyId
             AND s.recordedAt BETWEEN :start AND :end
-            AND s.status = com.sustainabilitytracker.sustainabilitytracker.enums.DataStatus.APPROVED
+            AND s.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getAverageSatisfactionScore(
             @Param("companyId") Long companyId,
