@@ -20,10 +20,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t sustainability-tracker .
 
-      - name: Login to Railway
-        uses: railwayapp/railway-action@v1
-        with:
-          token: ${{ secrets.RAILWAY_TOKEN }}
-
       - name: Deploy to Railway
-        run: railway up --service sustainability-tracker
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          npm install -g @railway/cli
+          railway up --service sustainability-tracker
