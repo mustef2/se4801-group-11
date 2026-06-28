@@ -2,7 +2,6 @@ package com.sustainabilitytracker.security;
 
 import com.sustainabilitytracker.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,7 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    @NullMarked
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         var user = userRepository.findByEmail(email)
