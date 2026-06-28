@@ -41,7 +41,7 @@ public interface EmissionRepository extends JpaRepository<EmissionData, Long> {
             FROM EmissionData e
             WHERE e.company.id = :companyId
             AND e.recordedAt BETWEEN :start AND :end
-            AND e.status = 'APPROVED'
+            AND e.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     EmissionTotalsProjection getTotalsByCompanyAndPeriod(
             @Param("companyId") Long companyId,
@@ -54,7 +54,7 @@ public interface EmissionRepository extends JpaRepository<EmissionData, Long> {
             FROM EmissionData e
             WHERE e.company.id = :companyId
             AND e.recordedAt BETWEEN :start AND :end
-            AND e.status = 'APPROVED'
+            AND e.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalCo2(
             @Param("companyId") Long companyId,
