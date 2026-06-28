@@ -35,7 +35,7 @@ public interface WasteRepository extends JpaRepository<WasteData, Long> {
                     / NULLIF(SUM(w.totalKg), 0), 0) AS recyclingRate
             FROM WasteData w
             WHERE w.company.id = :companyId
-            AND w.status = 'APPROVED'
+            AND w.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             AND w.recordedAt BETWEEN :start AND :end
             """)
     WasteTotalsProjection getTotalsByCompanyAndPeriod(
@@ -49,7 +49,7 @@ public interface WasteRepository extends JpaRepository<WasteData, Long> {
             FROM WasteData w
             WHERE w.company.id = :companyId
             AND w.recordedAt BETWEEN :start AND :end
-            AND w.status = 'APPROVED'
+            AND w.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalKg(
             @Param("companyId") Long companyId,
@@ -62,7 +62,7 @@ public interface WasteRepository extends JpaRepository<WasteData, Long> {
             FROM WasteData w
             WHERE w.company.id = :companyId
             AND w.recordedAt BETWEEN :start AND :end
-            AND w.status = 'APPROVED'
+            AND w.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalRecycledKg(
             @Param("companyId") Long companyId,
