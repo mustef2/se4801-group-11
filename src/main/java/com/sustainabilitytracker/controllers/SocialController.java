@@ -31,7 +31,7 @@ public class SocialController {
 
         SocialResponse response = socialService.submitSocial(request);
 
-        var uri = uriBuilder.path("/api/v1/social/{socialId}")
+        var uri = uriBuilder.path("/social/{socialId}")
                 .buildAndExpand(response.getId())
                 .toUri();
 
