@@ -30,7 +30,7 @@ public interface GovernanceRepository extends JpaRepository<GovernanceData, Long
                 AVG(g.boardDiversityPct) AS averageBoardDiversity
             FROM GovernanceData g
             WHERE g.company.id = :companyId
-            AND g.status = 'APPROVED'
+            AND g.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             AND g.recordedAt BETWEEN :start AND :end
             """)
     GovernanceTotalsProjection getTotalsByCompanyAndPeriod(
@@ -44,7 +44,7 @@ public interface GovernanceRepository extends JpaRepository<GovernanceData, Long
             FROM GovernanceData g
             WHERE g.company.id = :companyId
             AND g.recordedAt BETWEEN :start AND :end
-            AND g.status = 'APPROVED'
+            AND g.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getAverageComplianceScore(
             @Param("companyId") Long companyId,
@@ -57,7 +57,7 @@ public interface GovernanceRepository extends JpaRepository<GovernanceData, Long
             FROM GovernanceData g
             WHERE g.company.id = :companyId
             AND g.recordedAt BETWEEN :start AND :end
-            AND g.status = 'APPROVED'
+            AND g.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     int getTotalViolations(
             @Param("companyId") Long companyId,
@@ -70,7 +70,7 @@ public interface GovernanceRepository extends JpaRepository<GovernanceData, Long
             FROM GovernanceData g
             WHERE g.company.id = :companyId
             AND g.recordedAt BETWEEN :start AND :end
-            AND g.status = 'APPROVED'
+            AND g.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             AND g.ethicsTrainingDone = true
             """)
     boolean hasEthicsTraining(
