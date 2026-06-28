@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: sustainability-tracker
+  profiles:
+    active: dev
+
+  jwt:
+    secret: ${JWT_SECRET:default-test-secret-32-chars-long}
+    accessTokenExpiration: 900000
+    refreshTokenExpiration: 604800000
+#    isSecureCookie: false
+
+app:
+  report:
+    storage-path: uploads/reports/
+
+#server:
+#  servlet:
+  # context-path: /api/v1   # uncomment if needed
