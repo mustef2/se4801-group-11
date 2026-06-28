@@ -34,7 +34,7 @@ public interface EnergyRepository extends JpaRepository<EnergyData, Long> {
             FROM EnergyData e
             WHERE e.company.id = :companyId
             AND e.recordedAt BETWEEN :start AND :end
-            AND e.status = 'APPROVED'
+            AND e.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     EnergyTotalsProjection getTotalsByCompanyAndPeriod(
             @Param("companyId") Long companyId,
@@ -47,7 +47,7 @@ public interface EnergyRepository extends JpaRepository<EnergyData, Long> {
             FROM EnergyData e
             WHERE e.company.id = :companyId
             AND e.recordedAt BETWEEN :start AND :end
-            AND e.status = 'APPROVED'
+            AND e.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalKwh(
             @Param("companyId") Long companyId,
@@ -60,7 +60,7 @@ public interface EnergyRepository extends JpaRepository<EnergyData, Long> {
             FROM EnergyData e
             WHERE e.company.id = :companyId
             AND e.recordedAt BETWEEN :start AND :end
-            AND e.status = 'APPROVED'
+            AND e.status = com.sustainabilitytracker.enums.DataStatus.APPROVED
             """)
     BigDecimal getTotalRenewableKwh(
             @Param("companyId") Long companyId,
