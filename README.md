@@ -8,7 +8,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 ![Version](https://img.shields.io/badge/Version-0.0.1--SNAPSHOT-orange?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)
+
 
 </div>
 
@@ -91,7 +91,7 @@ Access: API Base URL → http://localhost:8080
 **Main Endpoints:**
 
 - `POST /auth/login`
-- `POST /auth/register`
+- `POST /users/register`
 - `POST /energy` → Submit Energy Data
 - `GET /energy` → Get Energy Records
 - Similar routes for Water, Waste, Emission, Social, Governance, etc.
@@ -108,9 +108,7 @@ Access: API Base URL → http://localhost:8080
 
 ---
 
-## 📄 License
 
-MIT License © 2025
 
 ---
 
